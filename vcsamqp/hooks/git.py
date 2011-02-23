@@ -4,7 +4,7 @@ import os, re
 from datetime import datetime
 import json
 
-"""SVN hooks APIs."""
+"""GIT hooks APIs."""
 
 EMAIL_RE = re.compile("^(.*) <(.*)>$")
 
