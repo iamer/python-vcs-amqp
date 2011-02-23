@@ -2,6 +2,7 @@
 
 import os, re 
 from datetime import datetime
+import json
 
 """SVN hooks APIs."""
 
@@ -14,7 +15,9 @@ class GitHookPayload:
     """
 
     def __init__(self, old, new, ref, commits):
-        self._rev = rev
+        self.old = old
+        self.new = new
+        self.ref = ref
         self.repo_url = ""
         self.repo_name = ""
         self.repo_description = ""
@@ -22,10 +25,13 @@ class GitHookPayload:
         self.owner_name = ""
         self.commits = commits
 
+    def __str__(self):
+        return json.dumps(self.payload, sort_keys=True, indent=4)
+
     @property
     def payload(self):
         """Get payload in github_payload format."""
-        payload = {
+        return {
           "before": self.old,
           "after": self.new,
           "ref": self.ref,
@@ -41,16 +47,14 @@ class GitHookPayload:
           "commits": self.commits,
         }
 
-        return payload
-
 
 class GitHooks:
     def __init__(self, sender):
         self._sender = sender
 
-    def _git_revlist(self, old, new):
+    def _get_revlist(self, old, new):
         with os.popen("git rev-list --pretty=medium %s..%s" % (old, new), "r") as handler:
-            return handler.readlines()
+            return handler.read()
 
     def _get_revisions(self, old, new):
         revlist = self._get_revlist(old, new)
@@ -110,7 +114,7 @@ class GitHooks:
         commits = self._get_commits(old, new)
 
         # prepare payload
-        payload = GitHookPayload(self, old, new, ref, commits)
+        payload = GitHookPayload(old, new, ref, commits)
 
         # send it
         self._sender.send_payload(payload)
