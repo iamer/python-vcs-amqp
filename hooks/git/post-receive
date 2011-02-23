@@ -1,0 +1,19 @@
+#!/usr/bin/python -tt
+
+"""
+POST-RECEIVE HOOK
+
+The "post-receive" script is run after receive-pack has accepted a pack
+and the repository has been updated.  It is passed arguments in through
+stdin in the form
+ <oldrev> <newrev> <refname>
+For example:
+ aa453216d1b3e49e7f6f98441fa56946ddcd6a20 68f7abf4e6f922807889f52bc043ecd31b79f814 refs/heads/master
+"""
+
+import sys
+from vcsamqp.hooks.git import GitHooks
+from vcsamqp.senders.log import FileLogger
+
+
+GitHooks(FileLogger("/tmp/postcommit.log")).postreceive(sys.argv[1], sys.argv[2], sys.argv[3])
