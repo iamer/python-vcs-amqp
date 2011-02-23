@@ -1,4 +1,4 @@
-#!/usr/bin/env python -tt
+#!/usr/bin/python -tt
 
 """
 POST-COMMIT HOOK
@@ -13,8 +13,8 @@ POST-COMMIT HOOK
 """
 
 import sys
-from vcs_amqp.hooks.svn import SvnHook
-from vcs_amqp.senders.log import FileLogger
+from vcsamqp.hooks.svn import SvnHooks
+from vcsamqp.senders.log import FileLogger
 
 
-SvnHook(FileLogger("/tmp/postcommit.log")).postcommit(sys.argv[1], sys.argv[2])
+SvnHooks(FileLogger("/tmp/postcommit.log")).postcommit(sys.argv[1], sys.argv[2])
