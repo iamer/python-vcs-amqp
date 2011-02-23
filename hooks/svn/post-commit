@@ -1,0 +1,20 @@
+#!/usr/bin/env python -tt
+
+"""
+POST-COMMIT HOOK
+
+ The post-commit hook is invoked after a commit.  Subversion runs
+ this hook with the following ordered arguments:
+
+   [1] REPOS-PATH   (the path to this repository)
+   [2] REV          (the number of the revision just committed)
+ Because the commit has already completed and cannot be undone,
+ the exit code of the hook program is ignored.
+"""
+
+import sys
+from vcs_amqp.hooks.svn import SvnHook
+from vcs_amqp.senders.log import FileLogger
+
+
+SvnHook(FileLogger("/tmp/postcommit.log")).postcommit(sys.argv[1], sys.argv[2])
