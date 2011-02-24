@@ -1,8 +1,8 @@
 #!/usr/bin/env python -tt
 
-import os
-
 """SVN hooks APIs."""
+
+import os
 
 class SvnHookPayload:
     """
@@ -20,13 +20,13 @@ class SvnHookPayload:
     @property
     def payload(self):
         """Get payload in github_payload format."""
-           
+
         changes = {"A": [], "U": [], "D": []}
         for line in self._changed:
             oper, path = line.split()
             # Used oper[0] to work with 'UU' operation
             if oper[0] in changes:
-                changes[oper[0]].append(path)                
+                changes[oper[0]].append(path)
 
         return {"commits":
                 [
@@ -53,9 +53,11 @@ class SvnHooks:
     @staticmethod
     def _svnlook(what, repos, rev):
         """Wrapper around svnlook tool."""
-        with os.popen("svnlook %s -r %s %s" % (what, rev, repos), "r") as handler:
+
+        with os.popen("svnlook %s -r %s %s" % \
+                      (what, rev, repos), "r") as handler:
             return handler.readlines()
-    
+
     def postcommit(self, repos, rev):
         """Postcommit hook."""
 
