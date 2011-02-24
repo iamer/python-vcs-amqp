@@ -14,7 +14,23 @@ POST-COMMIT HOOK
 
 import sys
 from vcsamqp.hooks.svn import SvnHooks
-from vcsamqp.senders.log import FileLogger
+#from vcsamqp.senders.log import FileLogger
+from vcsamqp.senders.amqp import AMQPSender
 
 
-SvnHooks(FileLogger("/tmp/postcommit.log")).postcommit(sys.argv[1], sys.argv[2])
+config = {"amqp_host": "hemeego-sidev-h001.europe.nokia.com",
+          "amqp_port": 5672,
+          "amqp_user": "vcsamqp",
+          "amqp_password": "123",
+          "amqp_vhost": "/vcsamqp",
+          "amqp_exchange": "",
+          "amqp_routing_key": "vcsamqp-queue",
+          "amqp_queue_name": "vcsamqp-queue",
+          "amqp_queue_durable": True,
+          "amqp_queue_exclusive": False,
+          "amqp_queue_auto_delete": False,
+          "amqp_delivery_mode": 1}
+
+#SvnHooks(FileLogger("/tmp/postcommit.log")).postcommit(sys.argv[1], sys.argv[2])
+SvnHooks(AMQPSender(config)).postcommit(sys.argv[1], sys.argv[2])
+

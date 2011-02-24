@@ -22,10 +22,11 @@ class AMQPSender:
         self._exclusive = config['amqp_queue_exclusive']
         self._auto_delete = config['amqp_queue_auto_delete']
         self._delivery_mode = config['amqp_delivery_mode']
-        
+
         # make connection to AMQP host
         credentials = pika.PlainCredentials(self._user, self._password)
         parameters = pika.ConnectionParameters(host=self._host,
+                                               port=self._port,
                                                virtual_host=self._vhost,
                                                credentials=credentials)
         connection = pika.BlockingConnection(parameters)
@@ -41,7 +42,8 @@ class AMQPSender:
 
         properties = pika.BasicProperties("text/plain",
                                           delivery_mode=self._delivery_mode)
+
         self._channel.basic_publish(exchange=self._exchange,
                                     routing_key=self._routing_key,
-                                    body=simplejson.dumps(payload),
+                                    body=simplejson.dumps(payload.payload),
                                     properties=properties)
