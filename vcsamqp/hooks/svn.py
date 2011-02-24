@@ -43,10 +43,16 @@ class SvnHookPayload:
 
 
 class SvnHooks:
+    """SVN hooks API. Gets hook data, creates hook payload object
+       and calls sender.send_payload.
+    """
+
     def __init__(self, sender):
         self._sender = sender
 
-    def _svnlook(self, what, repos, rev):
+    @staticmethod
+    def _svnlook(what, repos, rev):
+        """Wrapper around svnlook tool."""
         with os.popen("svnlook %s -r %s %s" % (what, rev, repos), "r") as handler:
             return handler.readlines()
     
