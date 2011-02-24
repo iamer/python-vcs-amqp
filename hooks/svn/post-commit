@@ -19,6 +19,7 @@ from vcsamqp.senders.amqp import AMQPSender
 
 
 config = {"amqp_host": "hemeego-sidev-h001.europe.nokia.com",
+          "amqp_port": 5672,
           "amqp_user": "vcsamqp",
           "amqp_password": "123",
           "amqp_vhost": "/vcsamqp",
