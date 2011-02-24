@@ -20,12 +20,21 @@ class SvnHookPayload:
     @property
     def payload(self):
         """Get payload in github_payload format."""
+           
+        changes = {"A": [], "U": [], "D": []}
+        for line in self._changed:
+            oper, path = line.split()
+            # Used oper[0] to work with 'UU' operation
+            if oper[0] in changes:
+                changes[oper[0]].append(path)                
 
         return {"commits":
                 [
                     {"author": {"name": self._author, "email": ""},
                      "id": self._rev,
-                     "modified": self._changed,
+                     "added": changes["A"],
+                     "modified": changes["U"],
+                     "removed": changes["D"],
                      "message": self._log,
                      "timestamp": self._date
                     }
