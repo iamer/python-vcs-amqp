@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 import pika
 import sys
+import simplejson
+
+from vcsamqp.settings import AMQP
 from vcsamqp.payload.common import Payload
 
 class baseListener():
@@ -71,3 +74,26 @@ class baseListener():
             self.connection.close()
             # Loop until we're fully closed, will stop on its own
             self.connection.ioloop.start()
+
+class AMQPListener(baseListener):
+    
+    def setup(self):
+        """ Overrid this method in your class to set name, type and routing_key """
+        self.name = AMQP["queue_name"]
+        self.exchange_type = "topic"
+        self.routing_key = AMQP["routing_key"]
+
+        # Step #5
+    def consume(self, channel, method, header, body):
+        """Called when we receive a message from RabbitMQ"""
+        print simplejson.loads(body)
+
+
+def main(argv):
+    listener = AMQPListener(AMQP["host"], AMQP["port"], AMQP["vhost"],
+                            AMQP["user"], AMQP["password"])
+    listener.start()
+    return 0
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv))
