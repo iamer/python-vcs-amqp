@@ -48,16 +48,18 @@ class GitHookPayload:
         }
 
 
+def _get_revlist(old, new):
+    with os.popen("git rev-list --pretty=medium %s..%s" % (old, new), "r") as handler:
+        return handler.read()
+
+
+
 class GitHooks:
     def __init__(self, sender):
         self._sender = sender
 
-    def _get_revlist(self, old, new):
-        with os.popen("git rev-list --pretty=medium %s..%s" % (old, new), "r") as handler:
-            return handler.read()
-
     def _get_revisions(self, old, new):
-        revlist = self._get_revlist(old, new)
+        revlist = _get_revlist(old, new)
         sections = revlist.split('\n\n')[:-1]
 
         revisions = []
