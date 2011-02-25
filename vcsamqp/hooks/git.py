@@ -2,50 +2,11 @@
 
 import os, re
 from datetime import datetime
-import json
 
 """GIT hooks APIs."""
 
+
 EMAIL_RE = re.compile("^(.*) <(.*)>$")
-
-class GitHookPayload:
-    """
-    Prepares hook payload in the github payload format:
-    https://github.com/github/github-services/blob/master/docs/github_payload
-    """
-
-    def __init__(self, old, new, ref, commits):
-        self.old = old
-        self.new = new
-        self.ref = ref
-        self.repo_url = ""
-        self.repo_name = ""
-        self.repo_description = ""
-        self.owner_email = ""
-        self.owner_name = ""
-        self.commits = commits
-
-    def __str__(self):
-        return json.dumps(self.payload, sort_keys=True, indent=4)
-
-    @property
-    def payload(self):
-        """Get payload in github_payload format."""
-        return {
-          "before": self.old,
-          "after": self.new,
-          "ref": self.ref,
-          "repository": {
-            "url": self.repo_url,
-            "name": self.repo_name,
-            "description": self.repo_description,
-            "owner": {
-              "email": self.owner_email,
-              "name": self.owner_name
-            }
-          },
-          "commits": self.commits,
-        }
 
 
 def _get_revlist(old, new):
@@ -101,19 +62,25 @@ def _get_commits(old, new):
     return commits
 
 
-class GitHooks:
+class GitHook(object):
 
     def __init__(self, sender):
         self._sender = sender
 
     def postreceive(self, old, new, ref):
         """Postcommit hook."""
-
-        # collect the info
-        commits = _get_commits(old, new)
-
-        # prepare payload
-        payload = GitHookPayload(old, new, ref, commits)
-
-        # send it
-        self._sender.send_payload(payload)
+        self._sender.send_payload({
+            "before": old,
+            "after": new,
+            "ref": ref,
+            "repository": {
+                "url": "",
+                "name": "",
+                "description": "",
+                "owner": {
+                    "email": "",
+                    "name": ""
+                }
+            },
+            "commits": _get_commits(old, new),
+        })
