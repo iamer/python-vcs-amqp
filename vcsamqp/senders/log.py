@@ -7,5 +7,5 @@ class FileLogger:
 
     def send_payload(self, payload):
     
-        with open(self._filename, "wa") as fhandler:
+        with open(self._filename, "a") as fhandler:
             fhandler.write(str(payload) + "\n")
