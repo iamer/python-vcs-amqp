@@ -75,7 +75,7 @@ class baseListener():
             # Loop until we're fully closed, will stop on its own
             self.connection.ioloop.start()
 
-class AMQPListener(baseListener):
+class TestListener(baseListener):
     
     def setup(self):
         """ Overrid this method in your class to set name, type and routing_key """
@@ -90,7 +90,7 @@ class AMQPListener(baseListener):
 
 
 def main(argv):
-    listener = AMQPListener(AMQP["host"], AMQP["port"], AMQP["vhost"],
+    listener = TestListener(AMQP["host"], AMQP["port"], AMQP["vhost"],
                             AMQP["user"], AMQP["password"])
     listener.start()
     return 0
