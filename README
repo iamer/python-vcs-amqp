@@ -4,3 +4,18 @@ that follows the github payload spec :
 
 https://github.com/github/github-services/blob/master/docs/github_payload
 
+Unit test cases
+
+1. Check that when a commit is done a new payload is sent both by SVN and GIT
+   hooks
+    - mimic commit retrievial
+    - mimic payload sending (implement TestSender fake class)
+    - make sure that JSON data follows the specs from the URL above
+
+2. Check senders
+    - mimic pika with Mox
+    - make sure that the whole code is covered with tests
+
+3. Check base listener
+    - mimic pika with Mox
+    - make sure that the whole code is covered with tests
