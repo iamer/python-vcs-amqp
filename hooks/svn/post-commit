@@ -13,24 +13,51 @@ POST-COMMIT HOOK
 """
 
 import sys
+
+from optparse import OptionParser
+
 from vcsamqp.hooks.svn import SvnHooks
-#from vcsamqp.senders.log import FileLogger
-from vcsamqp.senders.amqp import AMQPSender
+
+from vcsamqp.senders.log import FileLogger
+from vcsamqp.senders.amqp import BlockingAMQPSender, AsyncAMQPSender
+
+def parse_args(argv):
+    """ Commandline parser """
+    parser = OptionParser(usage="%prog [options]")
+    parser.add_option("--type", dest="type", metavar="<type of sender>",
+                      default="amqp-async",
+                      help="amqp-blocking, amqp-async and log are supported")
+
+    return parser.parse_args(argv)
 
 
-config = {"amqp_host": "hemeego-sidev-h001.europe.nokia.com",
-          "amqp_port": 5672,
-          "amqp_user": "vcsamqp",
-          "amqp_password": "123",
-          "amqp_vhost": "/vcsamqp",
-          "amqp_exchange": "",
-          "amqp_routing_key": "vcsamqp-queue",
-          "amqp_queue_name": "vcsamqp-queue",
-          "amqp_queue_durable": True,
-          "amqp_queue_exclusive": False,
-          "amqp_queue_auto_delete": False,
-          "amqp_delivery_mode": 1}
+def main(argv):
+    """Script entry point."""
 
-#SvnHooks(FileLogger("/tmp/postcommit.log")).postcommit(sys.argv[1], sys.argv[2])
-SvnHooks(AMQPSender(config)).postcommit(sys.argv[1], sys.argv[2])
+    options, args = parse_args(argv)
 
+    config = {"amqp_host": "hemeego-sidev-h001.europe.nokia.com",
+              "amqp_port": 5672,
+              "amqp_user": "vcsamqp",
+              "amqp_password": "123",
+              "amqp_vhost": "/vcsamqp",
+              "amqp_exchange": "",
+              "amqp_routing_key": "vcsamqp-queue",
+              "amqp_queue_name": "vcsamqp-queue",
+              "amqp_queue_durable": True,
+              "amqp_queue_exclusive": False,
+              "amqp_queue_auto_delete": False,
+              "amqp_delivery_mode": 1}
+
+    if options.type == "amqp-async":
+        sender = AsyncAMQPSender(config)
+    elif options.type == "amqp-blocking":
+        sender = BlockingAMQPSender(config)
+    elif options.type == "log":
+        sender = FileLogger("/tmp/postcommit.log")
+
+    SvnHooks(sender).postcommit(args[1], args[2])
+    return 0
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv))
