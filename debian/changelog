@@ -1,3 +1,12 @@
+python-vcs-amqp (0.1.0) unstable; urgency=low
+
+  * Designed project modules hierarchy
+  * Implemented and tested working prototype
+  * Setup documentation infrastructure
+  * Prepared code style and part of code documentation
+
+ -- Ed Bartosh <eduard.bartosh@nokia.com>  Fri, 25 Feb 2011 21:15:40 +0200
+
 python-vcs-amqp (0.0.0) unstable; urgency=low
 
   * Initial release
