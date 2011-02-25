@@ -1,6 +1,6 @@
 #!/usr/bin/env python -tt
 
-import os, re 
+import os, re
 from datetime import datetime
 import json
 
@@ -59,28 +59,28 @@ class GitHooks:
     def _get_revisions(self, old, new):
         revlist = self._get_revlist(old, new)
         sections = revlist.split('\n\n')[:-1]
-    
+
         revisions = []
         s = 0
         while s < len(sections):
             lines = sections[s].split('\n')
-                
+
             # first line is 'commit HASH\n'
             props = {'id': lines[0].strip().split(' ')[1]}
-                
+
             # read the header
             for l in lines[1:]:
                 key, val = l.split(' ', 1)
                 props[key[:-1].lower()] = val.strip()
-    
+
             # read the commit message
             props['message'] = sections[s+1]
-    
+
             # use github time format
             basetime = datetime.strptime(props['date'][:-6], "%a %b %d %H:%M:%S %Y")
             tzstr = props['date'][-5:]
             props['date'] = basetime.strftime('%Y-%m-%dT%H:%M:%S') + tzstr
-    
+
             # split up author
             m = EMAIL_RE.match(props['author'])
             if m:
@@ -90,10 +90,10 @@ class GitHooks:
                 props['name'] = 'unknown'
                 props['email'] = 'unknown'
             del props['author']
-            
+
             revisions.append(props)
             s += 2
-        
+
         return revisions
 
     def _get_commits(self, old, new):
