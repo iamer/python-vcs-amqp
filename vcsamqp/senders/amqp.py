@@ -1,6 +1,8 @@
 #!/usr/bin/env python -tt
 
-"""AMQP sender."""
+"""AMQP sender API."""
+
+__all__ = ["BasicAMQPSender", "BlockingAMQPSender", "AsyncAMQPSender"]
 
 import logging
 from abc import ABCMeta, abstractmethod
@@ -44,15 +46,36 @@ class BasicAMQPSender(object):
 
     @abstractmethod
     def send_payload(self, payload):
-        """Send payload to the server."""
+        """
+        Send payload to the server.
+        Abstract method. Has to be implemented in derived classes.
+
+        :param payload: data to be sent
+        :type payload: dictionary
+
+        """
+
         raise NotImplementedError
 
 
 class BlockingAMQPSender(BasicAMQPSender):
 
-    """Blocking (synchronous) sender."""
+    """
+    Blocking (synchronous) sender.
+    Code is borrowed from Pika Blocking demo_send example_blocking_:
+
+    .. _example_blocking: http://tonyg.github.com/pika/examples.html#id4
+
+    """
 
     def send_payload(self, payload):
+        """
+        Send payload to the server using blocking approach.
+
+        :param payload: data to be sent
+        :type payload: dictionary
+
+        """
 
         self._connection = pika.BlockingConnection(self._parameters)
         self._channel = self._connection.channel()
@@ -73,14 +96,34 @@ class BlockingAMQPSender(BasicAMQPSender):
 
 class AsyncAMQPSender(BasicAMQPSender):
 
-    """Asynchronous Sender."""
+    """
+
+    Asynchronous Sender.
+    Code is borrowed from Pika Asynchronous demo_send example_async_:
+
+    .. _example_async: http://tonyg.github.com/pika/examples.html#demo-send
+
+    Methods are placed in the same order as they're called by pika
+
+    """
 
     def on_connected(self, connection):
-        """Step #2: Called when we are fully connected to RabbitMQ."""
+        """
+        Callback. Called when we are fully connected to RabbitMQ.
+
+        :param connection: connection object
+        :type connection: object
+        """
         connection.channel(self.on_channel_open)
 
     def on_channel_open(self, channel):
-        """Step #3: Called when our channel has opened."""
+        """
+        Callback. Called when channel has opened.
+
+        :param channel: channel object
+        :type channel: object
+
+        """
         self._channel = channel
         channel.queue_declare(queue=self._queue, durable=self._durable,
                               exclusive=self._exclusive,
@@ -89,8 +132,13 @@ class AsyncAMQPSender(BasicAMQPSender):
 
 
     def on_queue_declared(self, _frame):
-        """Step #4: Called when RabbitMQ has told us our Queue has been
-           declared, frame is the response from RabbitMQ."""
+        """
+        Callback: Called when queue has been declared.
+
+        :param _frame: responce from broker
+        :type _frame: object
+
+        """
 
         self._channel.basic_publish(exchange=self._exchange,
                                     routing_key=self._routing_key,
@@ -102,8 +150,19 @@ class AsyncAMQPSender(BasicAMQPSender):
 
 
     def send_payload(self, payload):
+        """
+        Send payload to the server setting up chain of callbacks:
+        on_connected -> on_channel_open -> on_queue_declared.
+        (see above)
+
+        :param payload: data to be sent
+        :type payload: dictionary
+
+        """
+
 
         self._connection = pika.SelectConnection(self._parameters,
                                                  self.on_connected)
         self._payload = simplejson.dumps(payload)
         self._connection.ioloop.start()
+
