@@ -16,6 +16,7 @@ import sys
 
 from optparse import OptionParser
 
+from vcsamqp.settings import AMQP
 from vcsamqp.hooks.svn import SvnHooks
 
 from vcsamqp.senders.log import FileLogger
@@ -36,23 +37,10 @@ def main(argv):
 
     options, args = parse_args(argv)
 
-    config = {"amqp_host": "hemeego-sidev-h001.europe.nokia.com",
-              "amqp_port": 5672,
-              "amqp_user": "vcsamqp",
-              "amqp_password": "123",
-              "amqp_vhost": "/vcsamqp",
-              "amqp_exchange": "",
-              "amqp_routing_key": "vcsamqp-queue",
-              "amqp_queue_name": "vcsamqp-queue",
-              "amqp_queue_durable": True,
-              "amqp_queue_exclusive": False,
-              "amqp_queue_auto_delete": False,
-              "amqp_delivery_mode": 1}
-
     if options.type == "amqp-async":
-        sender = AsyncAMQPSender(config)
+        sender = AsyncAMQPSender(AMQP)
     elif options.type == "amqp-blocking":
-        sender = BlockingAMQPSender(config)
+        sender = BlockingAMQPSender(AMQP)
     elif options.type == "log":
         sender = FileLogger("/tmp/postcommit.log")
 

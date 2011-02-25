@@ -8,6 +8,8 @@ from abc import ABCMeta, abstractmethod
 import pika
 import simplejson
 
+from vcsamqp.settings import AMQP
+
 LOG = logging.getLogger(__name__)
 
 class BasicAMQPSender(object):
@@ -16,20 +18,20 @@ class BasicAMQPSender(object):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, config):
+    def __init__(self, config=AMQP):
 
-        self._host = config["amqp_host"]
-        self._port = config["amqp_port"]
-        self._user = config["amqp_user"]
-        self._password = config["amqp_password"]
-        self._vhost = config["amqp_vhost"]
-        self._exchange = config['amqp_exchange']
-        self._routing_key = config['amqp_routing_key']
-        self._queue = config['amqp_queue_name']
-        self._durable = config['amqp_queue_durable']
-        self._exclusive = config['amqp_queue_exclusive']
-        self._auto_delete = config['amqp_queue_auto_delete']
-        self._delivery_mode = config['amqp_delivery_mode']
+        self._host = config["host"]
+        self._port = config["port"]
+        self._user = config["user"]
+        self._password = config["password"]
+        self._vhost = config["vhost"]
+        self._exchange = config["exchange"]
+        self._routing_key = config["routing_key"]
+        self._queue = config["queue_name"]
+        self._durable = config["queue_durable"]
+        self._exclusive = config["queue_exclusive"]
+        self._auto_delete = config["queue_auto_delete"]
+        self._delivery_mode = config["delivery_mode"]
 
         self._credentials = pika.PlainCredentials(self._user, self._password)
         self._parameters = pika.ConnectionParameters(host=self._host,
