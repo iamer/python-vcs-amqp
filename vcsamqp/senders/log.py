@@ -8,4 +8,4 @@ class FileLogger:
     def send_payload(self, payload):
     
         with open(self._filename, "wa") as fhandler:
-            fhandler.write(str(payload.payload) + "\n")
+            fhandler.write(str(payload) + "\n")
