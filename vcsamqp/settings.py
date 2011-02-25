@@ -7,6 +7,7 @@ AMQP = {
     "password": "123",
     "vhost": "/vcsamqp",
     "exchange": "",
+    "exchange_type": "topic",
     "routing_key": "vcsamqp-queue",
     "queue_name": "vcsamqp-queue",
     "queue_durable": True,
