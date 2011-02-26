@@ -1,0 +1,252 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Senders &mdash; VCS AMQP v0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="VCS AMQP v0.1.0 documentation" href="index.html" />
+    <link rel="up" title="Modules and classes" href="modules.html" />
+    <link rel="next" title="Listeners" href="listeners.html" />
+    <link rel="prev" title="Modules and classes" href="modules.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="listeners.html" title="Listeners"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Modules and classes"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">VCS AMQP v0.1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Modules and classes</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="senders">
+<h1>Senders<a class="headerlink" href="#senders" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-vcsamqp.senders.amqp">
+<span id="amqp"></span><h2>amqp<a class="headerlink" href="#module-vcsamqp.senders.amqp" title="Permalink to this headline">¶</a></h2>
+<p>AMQP sender API.</p>
+<dl class="class">
+<dt id="vcsamqp.senders.amqp.BasicAMQPSender">
+<em class="property">class </em><tt class="descclassname">vcsamqp.senders.amqp.</tt><tt class="descname">BasicAMQPSender</tt><big>(</big><em>config={'exchange': ''</em>, <em>'delivery_mode': 1</em>, <em>'queue_auto_delete': False</em>, <em>'vhost': '/vcsamqp'</em>, <em>'host': 'hemeego-sidev-h001.europe.nokia.com'</em>, <em>'user': 'vcsamqp'</em>, <em>'password': '123'</em>, <em>'port': 5672</em>, <em>'queue_exclusive': False</em>, <em>'queue_durable': True</em>, <em>'queue_name': 'vcsamqp-queue'</em>, <em>'routing_key': 'vcsamqp-queue'</em>, <em>'exchange_type': 'topic'}</em><big>)</big><a class="headerlink" href="#vcsamqp.senders.amqp.BasicAMQPSender" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base abstract class for AMQP senders.</p>
+<dl class="method">
+<dt id="vcsamqp.senders.amqp.BasicAMQPSender.send_payload">
+<tt class="descname">send_payload</tt><big>(</big><em>payload</em><big>)</big><a class="headerlink" href="#vcsamqp.senders.amqp.BasicAMQPSender.send_payload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send payload to the server.
+Abstract method. Has to be implemented in derived classes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>payload</strong> (<em>dictionary</em>) &#8211; data to be sent</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="vcsamqp.senders.amqp.BlockingAMQPSender">
+<em class="property">class </em><tt class="descclassname">vcsamqp.senders.amqp.</tt><tt class="descname">BlockingAMQPSender</tt><big>(</big><em>config={'exchange': ''</em>, <em>'delivery_mode': 1</em>, <em>'queue_auto_delete': False</em>, <em>'vhost': '/vcsamqp'</em>, <em>'host': 'hemeego-sidev-h001.europe.nokia.com'</em>, <em>'user': 'vcsamqp'</em>, <em>'password': '123'</em>, <em>'port': 5672</em>, <em>'queue_exclusive': False</em>, <em>'queue_durable': True</em>, <em>'queue_name': 'vcsamqp-queue'</em>, <em>'routing_key': 'vcsamqp-queue'</em>, <em>'exchange_type': 'topic'}</em><big>)</big><a class="headerlink" href="#vcsamqp.senders.amqp.BlockingAMQPSender" title="Permalink to this definition">¶</a></dt>
+<dd><p>Blocking (synchronous) sender.
+Code is borrowed from Pika Blocking demo_send <a class="reference external" href="http://tonyg.github.com/pika/examples.html#id4">example_blocking</a>:</p>
+<dl class="method">
+<dt id="vcsamqp.senders.amqp.BlockingAMQPSender.send_payload">
+<tt class="descname">send_payload</tt><big>(</big><em>payload</em><big>)</big><a class="headerlink" href="#vcsamqp.senders.amqp.BlockingAMQPSender.send_payload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send payload to the server using blocking approach.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>payload</strong> (<em>dictionary</em>) &#8211; data to be sent</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="vcsamqp.senders.amqp.AsyncAMQPSender">
+<em class="property">class </em><tt class="descclassname">vcsamqp.senders.amqp.</tt><tt class="descname">AsyncAMQPSender</tt><big>(</big><em>config={'exchange': ''</em>, <em>'delivery_mode': 1</em>, <em>'queue_auto_delete': False</em>, <em>'vhost': '/vcsamqp'</em>, <em>'host': 'hemeego-sidev-h001.europe.nokia.com'</em>, <em>'user': 'vcsamqp'</em>, <em>'password': '123'</em>, <em>'port': 5672</em>, <em>'queue_exclusive': False</em>, <em>'queue_durable': True</em>, <em>'queue_name': 'vcsamqp-queue'</em>, <em>'routing_key': 'vcsamqp-queue'</em>, <em>'exchange_type': 'topic'}</em><big>)</big><a class="headerlink" href="#vcsamqp.senders.amqp.AsyncAMQPSender" title="Permalink to this definition">¶</a></dt>
+<dd><p>Asynchronous Sender.
+Code is borrowed from Pika Asynchronous demo_send <a class="reference external" href="http://tonyg.github.com/pika/examples.html#demo-send">example_async</a>:</p>
+<p>Methods are placed in the same order as they&#8217;re called by pika</p>
+<dl class="method">
+<dt id="vcsamqp.senders.amqp.AsyncAMQPSender.on_channel_open">
+<tt class="descname">on_channel_open</tt><big>(</big><em>channel</em><big>)</big><a class="headerlink" href="#vcsamqp.senders.amqp.AsyncAMQPSender.on_channel_open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback. Called when channel has opened.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>channel</strong> (<em>object</em>) &#8211; channel object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="vcsamqp.senders.amqp.AsyncAMQPSender.on_connected">
+<tt class="descname">on_connected</tt><big>(</big><em>connection</em><big>)</big><a class="headerlink" href="#vcsamqp.senders.amqp.AsyncAMQPSender.on_connected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback. Called when we are fully connected to RabbitMQ.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>connection</strong> (<em>object</em>) &#8211; connection object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="vcsamqp.senders.amqp.AsyncAMQPSender.on_queue_declared">
+<tt class="descname">on_queue_declared</tt><big>(</big><em>_frame</em><big>)</big><a class="headerlink" href="#vcsamqp.senders.amqp.AsyncAMQPSender.on_queue_declared" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback: Called when queue has been declared.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_frame</strong> (<em>object</em>) &#8211; responce from broker</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="vcsamqp.senders.amqp.AsyncAMQPSender.send_payload">
+<tt class="descname">send_payload</tt><big>(</big><em>payload</em><big>)</big><a class="headerlink" href="#vcsamqp.senders.amqp.AsyncAMQPSender.send_payload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send payload to the server setting up chain of callbacks:
+on_connected -&gt; on_channel_open -&gt; on_queue_declared.
+(see above)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>payload</strong> (<em>dictionary</em>) &#8211; data to be sent</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-vcsamqp.senders.log">
+<span id="log"></span><h2>log<a class="headerlink" href="#module-vcsamqp.senders.log" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="vcsamqp.senders.log.FileLogger">
+<em class="property">class </em><tt class="descclassname">vcsamqp.senders.log.</tt><tt class="descname">FileLogger</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#vcsamqp.senders.log.FileLogger" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="vcsamqp.senders.log.FileLogger.send_payload">
+<tt class="descname">send_payload</tt><big>(</big><em>payload</em><big>)</big><a class="headerlink" href="#vcsamqp.senders.log.FileLogger.send_payload" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Senders</a><ul>
+<li><a class="reference internal" href="#module-vcsamqp.senders.amqp">amqp</a></li>
+<li><a class="reference internal" href="#module-vcsamqp.senders.log">log</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="previous chapter">Modules and classes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="listeners.html"
+                        title="next chapter">Listeners</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/senders.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="listeners.html" title="Listeners"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Modules and classes"
+             >previous</a> |</li>
+        <li><a href="index.html">VCS AMQP v0.1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" >Modules and classes</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Islam Amer, Ed Bartosh, Anton Beresin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
