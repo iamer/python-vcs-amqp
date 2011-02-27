@@ -2,6 +2,8 @@
 
 """AMQP Listener."""
 
+__all__ = ["BaseAMQPListener", "AsyncAMQPListener"]
+
 import logging
 from abc import ABCMeta, abstractmethod
 
@@ -18,6 +20,14 @@ class BaseAMQPListener(object):
     __metaclass__ = ABCMeta
 
     def __init__(self, config=AMQP):
+
+        """
+        Initializes the base listener object.
+
+        :param config: Dictionary containing the needed configuration items.
+        :type config: dictionary
+
+        """
 
         self._host = config["host"]
         self._port = config["port"]
@@ -45,7 +55,13 @@ class BaseAMQPListener(object):
     @abstractmethod
     def receive_payload(self, channel, method, header, body):
 
-        """Recieve payload from the server."""
+        """
+        Recieve payload from the server.
+        Abstract method. Has to be implemented in derived classes.
+
+        :param body: data received
+        :type body: dictionary
+        """
 
         raise NotImplementedError
 
@@ -56,7 +72,12 @@ class AsyncAMQPListener(BaseAMQPListener):
 
     def __init__(self, config=AMQP):
 
-        """ Setup the connection """
+        """
+        Setup the connection with the provided configuration.
+        
+        :param config: Dictionary containing the needed configuration items.
+        :type config: dictionary
+        """
 
         super(AsyncAMQPListener, self).__init__(config = config)
         self.setup_connection()
@@ -70,14 +91,24 @@ class AsyncAMQPListener(BaseAMQPListener):
 
     def on_connected(self, connection):
 
-        """Step #2: Called when we are fully connected to RabbitMQ."""
+        """
+        Step #2: Called when we are fully connected to RabbitMQ.
+
+        :param connection: connection object
+        :type connection: object
+        """
 
         connection.channel(self.on_channel_open)
         self._connection = connection
 
     def on_channel_open(self, channel):
 
-        """Step #3: Called when our channel has opened."""
+        """
+        Step #3: Called when our channel has opened.
+
+        :param channel: channel object
+        :type channel: object
+        """
 
         self._channel = channel
         channel.exchange_declare(exchange = self._exchange,
@@ -87,7 +118,12 @@ class AsyncAMQPListener(BaseAMQPListener):
 
     def on_exchange_declared(self, frame):
 
-        """Step #4: Called when the exchange has been declared."""
+        """
+        Step #4: Called when the exchange has been declared.
+
+        :param _frame: response from broker
+        :type _frame: object
+        """
 
         self._channel.queue_declare(queue = self._queue, 
                                    durable = self._durable,
@@ -109,23 +145,34 @@ class AsyncAMQPListener(BaseAMQPListener):
 
     def on_queue_bound(self, frame):
 
-        """Step #6: Called when the queue has been bound to the exchange."""
+        """
+        Step #6: Called when the queue has been bound to the exchange.
+
+        :param _frame: response from broker
+        :type _frame: object
+        """
 
         self._channel.basic_consume(self.receive_payload, 
                                    queue = self._queue, 
                                    no_ack=True)
 
     def receive_payload(self, channel, method, header, body):
-        """Step #7: Called when we receive a message from RabbitMQ."""
+        """
+        Step #7: Called when we receive a message from RabbitMQ.
+        Implementation of recieve_payload that just prints the payload.
+
+        :param body: data received
+        :type body: dictionary
+        """
+
         self._payload = Payload(body)
         print self._payload
 
     def consume(self):
 
-        """ Start the IO event loop """
+        """Start the IO event loop so we can communicate with RabbitMQ."""
 
         try:
-            # Loop so we can communicate with RabbitMQ
             self._connection.ioloop.start()
         except KeyboardInterrupt:
             # Gracefully close the connection

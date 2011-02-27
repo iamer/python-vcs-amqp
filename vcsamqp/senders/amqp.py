@@ -135,7 +135,7 @@ class AsyncAMQPSender(BasicAMQPSender):
         """
         Callback: Called when queue has been declared.
 
-        :param _frame: responce from broker
+        :param _frame: response from broker
         :type _frame: object
 
         """

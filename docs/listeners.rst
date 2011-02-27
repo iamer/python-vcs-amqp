@@ -1,11 +1,9 @@
 Listeners
 =========
 
-Contents:
-
-.. toctree::
-   :maxdepth: 2
-
-   .. automodule:: vcsamqp.listeners.amqp
+amqp
+----
+.. automodule:: vcsamqp.listeners.amqp
    :members:
+   :undoc-members:
 
