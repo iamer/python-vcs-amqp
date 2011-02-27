@@ -55,10 +55,126 @@
             
   <div class="section" id="listeners">
 <h1>Listeners<a class="headerlink" href="#listeners" title="Permalink to this headline">¶</a></h1>
-<p>Contents:</p>
-<div class="toctree-wrapper compound">
-<ul class="simple">
-</ul>
+<div class="section" id="module-vcsamqp.listeners.amqp">
+<span id="amqp"></span><h2>amqp<a class="headerlink" href="#module-vcsamqp.listeners.amqp" title="Permalink to this headline">¶</a></h2>
+<p>AMQP Listener.</p>
+<dl class="class">
+<dt id="vcsamqp.listeners.amqp.BaseAMQPListener">
+<em class="property">class </em><tt class="descclassname">vcsamqp.listeners.amqp.</tt><tt class="descname">BaseAMQPListener</tt><big>(</big><em>config={'exchange': ''</em>, <em>'delivery_mode': 1</em>, <em>'queue_auto_delete': False</em>, <em>'vhost': '/vcsamqp'</em>, <em>'host': 'hemeego-sidev-h001.europe.nokia.com'</em>, <em>'user': 'vcsamqp'</em>, <em>'password': '123'</em>, <em>'port': 5672</em>, <em>'queue_exclusive': False</em>, <em>'queue_durable': True</em>, <em>'queue_name': 'vcsamqp-queue'</em>, <em>'routing_key': 'vcsamqp-queue'</em>, <em>'exchange_type': 'topic'}</em><big>)</big><a class="headerlink" href="#vcsamqp.listeners.amqp.BaseAMQPListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base abstract class for AMQP listeners.</p>
+<dl class="method">
+<dt id="vcsamqp.listeners.amqp.BaseAMQPListener.receive_payload">
+<tt class="descname">receive_payload</tt><big>(</big><em>channel</em>, <em>method</em>, <em>header</em>, <em>body</em><big>)</big><a class="headerlink" href="#vcsamqp.listeners.amqp.BaseAMQPListener.receive_payload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recieve payload from the server.
+Abstract method. Has to be implemented in derived classes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>body</strong> (<em>dictionary</em>) &#8211; data received</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="vcsamqp.listeners.amqp.AsyncAMQPListener">
+<em class="property">class </em><tt class="descclassname">vcsamqp.listeners.amqp.</tt><tt class="descname">AsyncAMQPListener</tt><big>(</big><em>config={'exchange': ''</em>, <em>'delivery_mode': 1</em>, <em>'queue_auto_delete': False</em>, <em>'vhost': '/vcsamqp'</em>, <em>'host': 'hemeego-sidev-h001.europe.nokia.com'</em>, <em>'user': 'vcsamqp'</em>, <em>'password': '123'</em>, <em>'port': 5672</em>, <em>'queue_exclusive': False</em>, <em>'queue_durable': True</em>, <em>'queue_name': 'vcsamqp-queue'</em>, <em>'routing_key': 'vcsamqp-queue'</em>, <em>'exchange_type': 'topic'}</em><big>)</big><a class="headerlink" href="#vcsamqp.listeners.amqp.AsyncAMQPListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Asynchronous Listener.</p>
+<dl class="method">
+<dt id="vcsamqp.listeners.amqp.AsyncAMQPListener.consume">
+<tt class="descname">consume</tt><big>(</big><big>)</big><a class="headerlink" href="#vcsamqp.listeners.amqp.AsyncAMQPListener.consume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the IO event loop so we can communicate with RabbitMQ.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="vcsamqp.listeners.amqp.AsyncAMQPListener.on_channel_open">
+<tt class="descname">on_channel_open</tt><big>(</big><em>channel</em><big>)</big><a class="headerlink" href="#vcsamqp.listeners.amqp.AsyncAMQPListener.on_channel_open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Step #3: Called when our channel has opened.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>channel</strong> (<em>object</em>) &#8211; channel object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="vcsamqp.listeners.amqp.AsyncAMQPListener.on_connected">
+<tt class="descname">on_connected</tt><big>(</big><em>connection</em><big>)</big><a class="headerlink" href="#vcsamqp.listeners.amqp.AsyncAMQPListener.on_connected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Step #2: Called when we are fully connected to RabbitMQ.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>connection</strong> (<em>object</em>) &#8211; connection object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="vcsamqp.listeners.amqp.AsyncAMQPListener.on_exchange_declared">
+<tt class="descname">on_exchange_declared</tt><big>(</big><em>frame</em><big>)</big><a class="headerlink" href="#vcsamqp.listeners.amqp.AsyncAMQPListener.on_exchange_declared" title="Permalink to this definition">¶</a></dt>
+<dd><p>Step #4: Called when the exchange has been declared.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_frame</strong> (<em>object</em>) &#8211; response from broker</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="vcsamqp.listeners.amqp.AsyncAMQPListener.on_queue_bound">
+<tt class="descname">on_queue_bound</tt><big>(</big><em>frame</em><big>)</big><a class="headerlink" href="#vcsamqp.listeners.amqp.AsyncAMQPListener.on_queue_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Step #6: Called when the queue has been bound to the exchange.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_frame</strong> (<em>object</em>) &#8211; response from broker</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="vcsamqp.listeners.amqp.AsyncAMQPListener.on_queue_declared">
+<tt class="descname">on_queue_declared</tt><big>(</big><em>frame</em><big>)</big><a class="headerlink" href="#vcsamqp.listeners.amqp.AsyncAMQPListener.on_queue_declared" title="Permalink to this definition">¶</a></dt>
+<dd><p>Step #5: Called when Queue has been declared.</p>
+<p>frame is the response from RabbitMQ</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="vcsamqp.listeners.amqp.AsyncAMQPListener.receive_payload">
+<tt class="descname">receive_payload</tt><big>(</big><em>channel</em>, <em>method</em>, <em>header</em>, <em>body</em><big>)</big><a class="headerlink" href="#vcsamqp.listeners.amqp.AsyncAMQPListener.receive_payload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Step #7: Called when we receive a message from RabbitMQ.
+Implementation of recieve_payload that just prints the payload.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>body</strong> (<em>dictionary</em>) &#8211; data received</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="vcsamqp.listeners.amqp.AsyncAMQPListener.setup_connection">
+<tt class="descname">setup_connection</tt><big>(</big><big>)</big><a class="headerlink" href="#vcsamqp.listeners.amqp.AsyncAMQPListener.setup_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Step #1: Connect to RabbitMQ.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
@@ -68,6 +184,14 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Listeners</a><ul>
+<li><a class="reference internal" href="#module-vcsamqp.listeners.amqp">amqp</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="senders.html"
                         title="previous chapter">Senders</a></p>
