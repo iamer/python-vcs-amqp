@@ -56,6 +56,7 @@ Some useful links related to `sphinx`_:
   - http://docutils.sourceforge.net/docs/user/rst/quickref.html
   - http://sphinx.pocoo.org/markup/code.html
   - http://sphinx.pocoo.org/ext/autodoc.html
+  - http://packages.python.org/an_example_pypi_project/sphinx.html
 
 .. _sphinx: http://sphinx.pocoo.org
 
